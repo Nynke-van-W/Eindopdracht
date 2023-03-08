@@ -1,3 +1,8 @@
+import calibration.colordetection as cd
+
+
+cd.color_detection("./calibration/bloemen.jpeg")
+
 coords = {
     (0,0): [(0, 0), (100, 100)],
     (1,0): [(100, 100), (200, 200)]
