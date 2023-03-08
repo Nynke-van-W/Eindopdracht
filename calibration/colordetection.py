@@ -13,24 +13,33 @@ lower_red = np.array([0,5,193])  # BGR-code of your lowest red
 upper_red = np.array([27,87,247])   # BGR-code of your highest red
 mask = cv.inRange(image, lower_red, upper_red)
 #get all non zero values
-coord=cv.findNonZero(mask)
+coords=cv.findNonZero(mask)
 output = cv.bitwise_and(image, image, mask = mask)
+
+
+coords = coords.tolist()
+newCoords = []
+for c in coords:
+    newCoords.append(c[0])
+
+center = [sum(c)/len(c) for c in zip(*newCoords)]
+cv.circle(output, (int(center[0]), int(center[1])), 3, [0, 255, 0], 3)
 
 # show the images
 cv.imshow("images", np.hstack([image, output]))
 
 #make readable coordinates
 #convert the multiple whitespace to single white space
-coord=' '.join(np.split())
+# coord=' '.join(np.split())
 
 #replace whitespace with comma
-coord=coord.replace(" ",",")
+# coord=coord.replace(" ",",")
 
 #make a list of it
-lists = json.loads(coord)
+# lists = json.loads(coord)
 
-print(lists[0])
-print(coord)
+# print(lists[0])
+
 
 if cv.waitKey(0) & 0xff == 27:
     cv.destryAllWindows()
