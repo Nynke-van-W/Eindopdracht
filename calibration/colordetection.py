@@ -7,26 +7,7 @@ ap = argparse.ArgumentParser()
 # ap.add_argument("-i", "--image", help = "path to the image")
 # args = vars(ap.parse_args())
 # load the image
-image = cv.imread("bloemen.jpeg")
 
-lower_red = np.array([0,5,193])  # BGR-code of your lowest red
-upper_red = np.array([27,87,247])   # BGR-code of your highest red
-mask = cv.inRange(image, lower_red, upper_red)
-#get all non zero values
-coords=cv.findNonZero(mask)
-output = cv.bitwise_and(image, image, mask = mask)
-
-
-coords = coords.tolist()
-newCoords = []
-for c in coords:
-    newCoords.append(c[0])
-
-center = [sum(c)/len(c) for c in zip(*newCoords)]
-cv.circle(output, (int(center[0]), int(center[1])), 3, [0, 255, 0], 3)
-
-# show the images
-cv.imshow("images", np.hstack([image, output]))
 
 #make readable coordinates
 #convert the multiple whitespace to single white space
@@ -41,8 +22,7 @@ cv.imshow("images", np.hstack([image, output]))
 # print(lists[0])
 
 
-if cv.waitKey(0) & 0xff == 27:
-    cv.destryAllWindows()
+
 # define the list of boundaries
 # boundaries = [
 # 	([17, 15, 100], [50, 56, 200]),
@@ -64,3 +44,28 @@ if cv.waitKey(0) & 0xff == 27:
 # 	# show the images
 # 	cv.imshow("images", np.hstack([image, output]))
 # 	cv.waitKey(1000)
+
+def color_detection(file_location):
+    image = cv.imread(file_location)
+
+    lower_red = np.array([0,5,193])  # BGR-code of your lowest red
+    upper_red = np.array([27,87,247])   # BGR-code of your highest red
+    mask = cv.inRange(image, lower_red, upper_red)
+    #get all non zero values
+    coords=cv.findNonZero(mask)
+    output = cv.bitwise_and(image, image, mask = mask)
+
+
+    coords = coords.tolist()
+    newCoords = []
+    for c in coords:
+        newCoords.append(c[0])
+
+    center = [sum(c)/len(c) for c in zip(*newCoords)]
+    cv.circle(output, (int(center[0]), int(center[1])), 3, [0, 255, 0], 3)
+
+    # show the images
+    cv.imshow("images", np.hstack([image, output]))
+
+    if cv.waitKey(0) & 0xff == 27:
+        cv.destryAllWindows()
