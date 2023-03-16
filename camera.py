@@ -48,31 +48,58 @@ while (True):
         for c in corners:
             newCorners.append(c[0])
 
-        print(newCorners)
+        # print(newCorners)
         # Draw and display the corners
         cv.drawChessboardCorners(hoeken, chessboardSize, corners2, ret)
         cv.imshow('img', hoeken)
 
+        upper_red = np.array([77, 108, 219])  # BGR-code of your lowest red
+        lower_red = np.array([53, 77, 182])  # BGR-code of your highest red
+        mask = cv.inRange(frame, lower_red, upper_red)
+        # get all non zero values
+        coords = cv.findNonZero(mask)
+        output = cv.bitwise_and(frame, frame, mask=mask)
 
-    #colordetection
-    upper_red = np.array([77, 108, 219])  # BGR-code of your lowest red
-    lower_red = np.array([53, 77, 182])  # BGR-code of your highest red
-    mask = cv.inRange(frame, lower_red, upper_red)
-    # get all non zero values
-    coords = cv.findNonZero(mask)
-    output = cv.bitwise_and(frame, frame, mask=mask)
+        center = 0
+        if coords is not None:
+            coords = coords.tolist()
+            for c in coords:
+                newCoords.append(c[0])
 
-    if coords is not None:
-        coords = coords.tolist()
-        for c in coords:
-            newCoords.append(c[0])
+            center = [sum(c) / len(c) for c in zip(*newCoords)]
+            cv.circle(output, (int(center[0]), int(center[1])), 3, [0, 255, 0], 3)
 
-        center = [sum(c) / len(c) for c in zip(*newCoords)]
-        cv.circle(output, (int(center[0]), int(center[1])), 3, [0, 255, 0], 3)
-        print(center)
-        # show the images
-    cv.imshow("images", np.hstack([frame, output]))
-    cv.waitKey(1000)
+            # show the images
+        cv.imshow("images", np.hstack([frame, output]))
+        print(f'center: {center}')
+        sortedlist = sorted(newCorners, key=lambda k: [k[1], k[0]])
+        # print(f'List: {sortedlist}')
+
+        # Creating an empty dictionary
+        dicts = {}
+        keys = range(len(sortedlist))
+        values = sortedlist
+
+        for y in range(7):
+            for i in range(9):
+                if i < 9 and y < 6:
+                    point = values[(y * 5 + i)]
+                    point2 = values[(y * 5 + i + 10)]
+                    dicts[(i, y)] = point, point2
+
+        print(dicts)
+
+        if center != 0:
+            punt = center
+
+            for key in dicts:
+                if dicts[key][0][0] <= punt[0] <= dicts[key][1][0] and dicts[key][0][1] <= punt[1] <= dicts[key][1][1]:
+                    print(f"Punt is in gebied: {key}")
+        cv.waitKey(1000)
+
+#coordinaten
+
+
 
     if cv.waitKey(1) & 0xFF == ord('q'):
         break

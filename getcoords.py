@@ -5,8 +5,8 @@ import numpy as np
 #cd.color_detection("./calibration/bloemen.jpeg")
 
 coords = {
-    (0,0): [(0, 0), (100, 100)],
-    (1,0): [(100, 100), (200, 200)]
+    (0,0): ([0, 0], [100, 100]),
+    (1,0): ([100, 100], [200, 200])
 }
 punt = [109, 190]
 
