@@ -4,8 +4,17 @@ import numpy as np
 upper_red = np.array([77, 108, 219])  # BGR-code of your lowest red
 lower_red = np.array([53, 77, 182])  # BGR-code of your highest red
 
+upper_blue = np.array([147, 100, 49])
+lower_blue = np.array([103, 67, 31])
+
+upper_yellow = np.array([128, 240, 254])  # BGR-code of your lowest red
+lowerd_yellow = np.array([64, 160,174])  # BGR-code of your highest red
+
+upper_purple = np.array([225, 173, 189])
+lower_purple = np.array([123, 76, 78])
+
 vid = cv.VideoCapture(0)
-chessboardSize = (13,8)
+chessboardSize = (9,7)
 
 criteria = (cv.TERM_CRITERIA_EPS + cv.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
@@ -20,7 +29,7 @@ newCoords = []
 while (True):
     ret, frame = vid.read()
     ret, hoeken = vid.read()
-    #cv.imshow('frame', frame)
+    cv.imshow('frame', frame)
 
     gray = cv.cvtColor(hoeken, cv.COLOR_BGR2GRAY)
     ret, corners = cv.findChessboardCorners(gray, chessboardSize, None)
